@@ -10,49 +10,22 @@ on:
 env:
   LINK: ${{ github.event.inputs.link }}
   ORG: AthenaPrjk
-  TG_CHAT: ${{ secrets.TG_CHAT }}
-  TG_TOKEN: ${{ secrets.TG_TOKEN }}
+  TELEGRAM_CHAT: ${{ secrets.TELEGRAM_CHAT }}
+  TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
   TZ: Asia/Jakarta
 
 jobs:
   dumper:
-      runs-on: ubuntu-20.04
+      runs-on: ubuntu-latest
+      container:
+            image: renayura/archlinux:latest
 
       steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Cleanup Space
-        uses: rokibhasansagar/slimhub_actions@main         
-
-      - name: Add configs
-        run: |
-             export GIT_TRACE_PACKET=1
-             export GIT_TRACE=1
-             export GIT_CURL_VERBOSE=1
-
-      - name: Clone dumper repos
-        run: |
-             git clone --depth=1 https://github.com/DumprX/DumprX
-             cd DumprX
-             sudo apt update -y && sudo apt upgrade -y
-             sudo apt install unace unrar zip unzip p7zip-full p7zip-rar sharutils rar uudeview mpack arj cabextract device-tree-compiler liblzma-dev python3-pip brotli liblz4-tool axel gawk aria2 detox cpio rename expect -y
-             sudo pip3 install backports.lzma protobuf pycrypto docopt zstandard twrpdtgen extract-dtb
-             sudo pip3 install --upgrade protobuf==3.20.0
-
-      - name: Setup configs
-        run: |
-             cd DumprX
-             bash setup.sh
-             git config --global user.name "Renayura"
-             git config --global user.email "renayura@proton.me"
-             echo "$GH_TOKEN" > .github_token
-             echo "$ORG" > .github_orgname
-             echo "$TG_CHAT" > .tg_chat
-             echo "$TG_TOKEN" > .tg_token
       - name: Start dumping firmware
         run: |
-             cd DumprX
-             bash dumper.sh $LINK
+             bash dumper.sh
