@@ -29,6 +29,9 @@ git clone --depth=1 https://github.com/DumprX/DumprX
 cd DumprX
 
 # Setup configs
+export GIT_TRACE_PACKET=1
+export GIT_TRACE=1
+export GIT_CURL_VERBOSE=1
 bash setup.sh
 git config --global user.name "Renayura"
 git config --global user.email "renayura@proton.me"
